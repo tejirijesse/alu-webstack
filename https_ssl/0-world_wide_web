@@ -4,11 +4,14 @@
 get_dns_info() {
     local subdomain=$1
     local domain=$2
-    dig +short "${subdomain}.${domain}" | while read -r ip; do
-        if [[ -n $ip ]]; then
-            echo "The subdomain ${subdomain} is a A record and points to ${ip}"
-        fi
-    done
+    local record_type="A"
+    local result=$(dig +short "${subdomain}.${domain}")
+    
+    if [[ -n $result ]]; then
+        echo "The subdomain ${subdomain} is a ${record_type} record and points to ${result}"
+    else
+        echo "No DNS record found for ${subdomain}.${domain}"
+    fi
 }
 
 # Main function
